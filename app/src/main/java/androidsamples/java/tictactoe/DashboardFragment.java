@@ -50,11 +50,11 @@ public class DashboardFragment extends Fragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     Log.d(TAG, "onCreate");
-    Log.d(TAG, "onCreate");
+//    Log.d(TAG, "onCreate");
 
     setHasOptionsMenu(true); // Needed to display the action menu for this fragment
     gamesRef = FirebaseDatabase.getInstance("https://tictactoe-4b442-default-rtdb.firebaseio.com/").getReference("games");
-    Log.d(TAG, "After Checking for  firebase");
+//    Log.d(TAG, "After Checking for  firebase");
     setHasOptionsMenu(true); // Needed to display the action menu for this fragment
   }
 
@@ -83,73 +83,74 @@ public class DashboardFragment extends Fragment {
     }
 //
     usersRef = FirebaseDatabase.getInstance().getReference("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-//    ArrayList<GameModel> gameList = new ArrayList<>();
-//    gamesRef.addValueEventListener(new ValueEventListener() {
-//      @Override
-//      public void onDataChange(@NonNull DataSnapshot snapshot) {
-//        gameList.clear();
-//        for (DataSnapshot shot : snapshot.getChildren()) {
-//          GameModel game = shot.getValue(GameModel.class);
-//          if (game.getIsOpen() && !game.getHost().equals(auth.getCurrentUser().getUid())) gameList.add(game);
-//        }
-//        rv.setAdapter(new OpenGamesAdapter(gameList, mNavController));
-//        rv.setLayoutManager(new LinearLayoutManager(getContext()));
-//        info.setText(gameList.isEmpty() ? "No Open Games Available :(" : "Open Games");
-//      }
-//
-//      @Override
-//      public void onCancelled(@NonNull DatabaseError error) {
-//
-//      }
-//    });
-//
-//    usersRef.addValueEventListener(new ValueEventListener() {
-//      @Override
-//      public void onDataChange(@NonNull DataSnapshot snapshot) {
-//        won.setText(snapshot.child("won").getValue().toString());
-//        lost.setText(snapshot.child("lost").getValue().toString());
-//      }
-//
-//      @Override
-//      public void onCancelled(@NonNull DatabaseError error) {
-//
-//      }
-//    });
-//
-//    // Show a dialog when the user clicks the "new game" button
-//    view.findViewById(R.id.fab_new_game).setOnClickListener(v -> {
-//
-//      // A listener for the positive and negative buttons of the dialog
-//      DialogInterface.OnClickListener listener = (dialog, which) -> {
-//        String gameType = "No type";
-//        String gameId = "Single Game ID";
-//        if (which == DialogInterface.BUTTON_POSITIVE) {
-//          gameType = getString(R.string.two_player);
-//          gameId = gamesRef.push().getKey();
-//          assert gameId != null;
-//          gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId));
-//          Log.i("FIREBASE", "Value set");
-//          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId);
-//          mNavController.navigate(action);
-//        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-//          gameType = getString(R.string.one_player);
-//          NavDirections action = DashboardFragmentDirections.actionGameSingle(gameType, gameId);
-//          Log.d(TAG, "");
-//          mNavController.navigate(action);
-//        }
-//        Log.d(TAG, "New Game: " + gameType);
-//      };
-//
-//      // create the dialog
-//      AlertDialog dialog = new AlertDialog.Builder(requireActivity())
-//              .setTitle(R.string.new_game)
-//              .setMessage(R.string.new_game_dialog_message)
-//              .setPositiveButton(R.string.two_player, listener)
-//              .setNegativeButton(R.string.one_player, listener)
-//              .setNeutralButton(R.string.cancel, (d, which) -> d.dismiss())
-//              .create();
-//      dialog.show();
-//    });
+    Log.d(TAG, "the user ref is "+usersRef);
+    ArrayList<GameModel> gameList = new ArrayList<>();
+    gamesRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        gameList.clear();
+        for (DataSnapshot shot : snapshot.getChildren()) {
+          GameModel game = shot.getValue(GameModel.class);
+          if (game.getIsOpen() && !game.getHost().equals(auth.getCurrentUser().getUid())) gameList.add(game);
+        }
+        rv.setAdapter(new OpenGamesAdapter(gameList, mNavController));
+        rv.setLayoutManager(new LinearLayoutManager(getContext()));
+        info.setText(gameList.isEmpty() ? "No Open Games Available :(" : "Open Games");
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+
+      }
+    });
+
+    usersRef.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot snapshot) {
+        won.setText(snapshot.child("won").getValue().toString());
+        lost.setText(snapshot.child("lost").getValue().toString());
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError error) {
+
+      }
+    });
+
+    // Show a dialog when the user clicks the "new game" button
+    view.findViewById(R.id.fab_new_game).setOnClickListener(v -> {
+
+      // A listener for the positive and negative buttons of the dialog
+      DialogInterface.OnClickListener listener = (dialog, which) -> {
+        String gameType = "No type";
+        String gameId = "Single Game ID";
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+          gameType = getString(R.string.two_player);
+          gameId = gamesRef.push().getKey();
+          assert gameId != null;
+          gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId));
+          Log.i("FIREBASE", "Value set");
+          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId);
+          mNavController.navigate(action);
+        } else if (which == DialogInterface.BUTTON_NEGATIVE) {
+          gameType = getString(R.string.one_player);
+          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId);
+          Log.d(TAG, "");
+          mNavController.navigate(action);
+        }
+        Log.d(TAG, "New Game: " + gameType);
+      };
+
+      // create the dialog
+      AlertDialog dialog = new AlertDialog.Builder(requireActivity())
+              .setTitle(R.string.new_game)
+              .setMessage(R.string.new_game_dialog_message)
+              .setPositiveButton(R.string.two_player, listener)
+              .setNegativeButton(R.string.one_player, listener)
+              .setNeutralButton(R.string.cancel, (d, which) -> d.dismiss())
+              .create();
+      dialog.show();
+    });
   }
 
   @Override
