@@ -32,14 +32,15 @@ public class LoginFragment extends Fragment {
     private EditText email, password;
     private DatabaseReference userReference;
     private ProgressDialog pd;
+    public final String TAG= "login";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         auth = FirebaseAuth.getInstance();
-        userReference = FirebaseDatabase.getInstance("https://tictactoe-4b442-default-rtdb.firebaseio.com/").getReference("testing");
-        userReference.setValue("here in the database again");
+        userReference = FirebaseDatabase.getInstance("https://tictactoe-4b442-default-rtdb.firebaseio.com/").getReference("users");
+//        userReference.setValue("here in the database again");
         //if a user is logged in, go to Dashboard
         if (auth.getCurrentUser() != null) {
             NavHostFragment.findNavController(this).navigate(R.id.action_login_successful);
@@ -69,6 +70,7 @@ public class LoginFragment extends Fragment {
                                         login(email.getText().toString(), password.getText().toString());
                                     } else {
                                         Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                        Log.d(TAG, task.getException().getMessage());
                                         task.getException().printStackTrace();
                                     }
                                 } else {
