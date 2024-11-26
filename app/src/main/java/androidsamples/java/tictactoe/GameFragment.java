@@ -326,6 +326,7 @@ public class GameFragment extends Fragment {
         GameModel l = snapshot.getValue(GameModel.class);
         game.updateGameArray(l);
         gameArray = (game.getGameArray()).toArray(new String[9]);
+        Log.d(TAG, ""+game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()));
         if(!isEmpty()){
           if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             display.setText(R.string.waiting);

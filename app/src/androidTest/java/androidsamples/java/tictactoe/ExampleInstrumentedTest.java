@@ -103,13 +103,6 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.btn_log_in))
                 .perform(click());
 
-        // Step 4: Wait to ensure the toast is displayed
-//        try {
-//            Thread.sleep(2000); // Add delay for the toast to appear
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         // Step 5: Retrieve the DecorView
         final View[] decorView = new View[1];
         activityRule.getScenario().onActivity(activity -> {
