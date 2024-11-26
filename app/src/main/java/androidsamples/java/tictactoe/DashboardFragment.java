@@ -130,11 +130,11 @@ public class DashboardFragment extends Fragment {
           assert gameId != null;
           gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId));
           Log.i("FIREBASE", "Value set");
-          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId);
+          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId,"X");
           mNavController.navigate(action);
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
           gameType = getString(R.string.one_player);
-          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId);
+          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId,"X");
           Log.d(TAG, "");
           mNavController.navigate(action);
         }

@@ -66,7 +66,7 @@ public class OpenGamesAdapter extends RecyclerView.Adapter<OpenGamesAdapter.View
       mContentView.setText(game);
       mIdView.setText("#" + i);
       mView.setOnClickListener(v -> {
-        NavDirections action = DashboardFragmentDirections.actionGame("Two-Player", game);
+        NavDirections action = DashboardFragmentDirections.actionGame("Two-Player", game,"O");
         Navigation.findNavController(mView).navigate(action);
       });
     }
