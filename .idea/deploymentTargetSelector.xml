@@ -5,19 +5,19 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testDashboardAccessibility()">
-        <option name="selectionMode" value="DROPDOWN" />
-      </SelectionState>
       <SelectionState runConfigName="ExampleInstrumentedTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testLoginAndDashboardAccessibility()">
+      <SelectionState runConfigName="testLogin()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testLogoutMenuAccessibility()">
+      <SelectionState runConfigName="testPasswordIsHidden()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="testLoginFailedToast()">
+      <SelectionState runConfigName="testEmailField()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="testDashboardAccessibility()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
