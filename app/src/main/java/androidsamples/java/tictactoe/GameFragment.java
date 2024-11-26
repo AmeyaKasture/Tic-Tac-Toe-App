@@ -318,7 +318,8 @@ public class GameFragment extends Fragment {
         myTurn = updateTurn(game.getTurn());
 //        display.setText(R.string.your_turn);
         int win = checkWin();
-        if (win == 1 || win == -1) endGame(win);
+        Log.d(TAG, "Winner is "+win);
+        if (! (win==0) )endGame(win);
         else if (checkDraw()) endGame(0);
       }
 
@@ -346,12 +347,15 @@ public class GameFragment extends Fragment {
   private void updateDB() {
     gameReference.child("gameArray").setValue(Arrays.asList(gameArray));
     gameReference.child("isOpen").setValue(!gameEnded);
-    if (game.getTurn() == 1) {
-      game.setTurn(2);
-    } else {
-      game.setTurn(1);
+    if(!gameEnded){
+      if (game.getTurn() == 1) {
+        game.setTurn(2);
+      } else {
+        game.setTurn(1);
+      }
+      gameReference.child("turn").setValue(game.getTurn());
     }
-    gameReference.child("turn").setValue(game.getTurn());
+
   }
 
   private void doRoboThings() {
