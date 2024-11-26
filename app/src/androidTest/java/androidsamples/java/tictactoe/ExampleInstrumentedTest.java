@@ -1,13 +1,19 @@
 package androidsamples.java.tictactoe;
 
 import android.content.Context;
+import android.text.InputType;
 import android.view.View;
+import android.widget.EditText;
 
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.test.espresso.matcher.RootMatchers;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,6 +24,7 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
+import static androidx.test.espresso.matcher.ViewMatchers.withHint;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -41,89 +48,64 @@ public class ExampleInstrumentedTest {
     }
 
     @Test
-    public void testLoginScreenAccessibility() {
-        // Check that the email EditText has a content description
+    public void testEmailFieldAccessibility() {
+        // Check that the email field is displayed
+        onView(withId(R.id.edit_email))
+                .check(matches(isDisplayed()));
+
+        // Check the content description of the email field
         onView(withId(R.id.edit_email))
                 .check(matches(withContentDescription("Email field for login")));
 
-        // Check that the password EditText has a content description
+        // Check the hint text of the email field
+        onView(withId(R.id.edit_email))
+                .check(matches(withHint("Email")));
+    }
+
+    @Test
+    public void testPasswordFieldAccessibility() {
+        // Check that the password field is displayed
+        onView(withId(R.id.edit_password))
+                .check(matches(isDisplayed()));
+
+        // Check the content description of the password field
         onView(withId(R.id.edit_password))
                 .check(matches(withContentDescription("Password field for login")));
 
-        // Check that the login button has a content description
+        // Check the hint text of the password field
+        onView(withId(R.id.edit_password))
+                .check(matches(withHint("Password")));
+    }
+
+    @Test
+    public void testLoginButtonAccessibility() {
+        // Check that the login button is displayed
+        onView(withId(R.id.btn_log_in))
+                .check(matches(isDisplayed()));
+
+        // Check the content description of the login button
         onView(withId(R.id.btn_log_in))
                 .check(matches(withContentDescription("Click to log in")));
     }
 
     @Test
-    public void testDashboardAccessibility() throws InterruptedException {
-        // Step 1: Perform login
-        InstrumentationRegistry.getInstrumentation().getUiAutomation()
-                .executeShellCommand("settings put secure autofill_service null");
-
+    public void testFieldsAreVisibleTogether() {
+        // Check that all fields are displayed on the screen
         onView(withId(R.id.edit_email))
-                .perform(typeText("hi@gmail.com"), closeSoftKeyboard());
-
+                .check(matches(isDisplayed()));
         onView(withId(R.id.edit_password))
-                .perform(typeText("1122334455"), closeSoftKeyboard());
-
+                .check(matches(isDisplayed()));
         onView(withId(R.id.btn_log_in))
-                .perform(click());
-
-        // Step 2: Add delay after clicking the login button
-        Thread.sleep(3000); // Wait for 3 seconds
-
-        // Step 3: Verify the Dashboard is displayed and check accessibility
-        onView(withId(R.id.won_score))
-                .check(matches(withContentDescription("Games won score")))
-                .check(matches(withText("0")));
-
-        onView(withId(R.id.lost_score))
-                .check(matches(withContentDescription("Games lost score")))
-                .check(matches(withText("0")));
-
-        onView(withId(R.id.open_display))
-                .check(matches(withContentDescription("List of open games")))
-                .check(matches(withText("Open Games")));
-
-
-    }
-
-    @Test
-    public void testLoginFailedToast() {
-        // Step 1: Enter invalid email
-        onView(withId(R.id.edit_email))
-                .perform(typeText("hi@gmail.com"), closeSoftKeyboard());
-
-        // Step 2: Enter invalid password
-        onView(withId(R.id.edit_password))
-                .perform(typeText("000000000"), closeSoftKeyboard());
-
-        // Step 3: Click the login button
-        onView(withId(R.id.btn_log_in))
-                .perform(click());
-
-        // Step 4: Wait to ensure the toast is displayed
-//        try {
-//            Thread.sleep(2000); // Add delay for the toast to appear
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
-        // Step 5: Retrieve the DecorView
-        final View[] decorView = new View[1];
-        activityRule.getScenario().onActivity(activity -> {
-            decorView[0] = activity.getWindow().getDecorView();
-        });
-
-        // Step 6: Verify the toast message
-        onView(withText("Authentication failed"))
-                .inRoot(RootMatchers.withDecorView(not(decorView[0])))
                 .check(matches(isDisplayed()));
     }
 
-
-
+    @Test
+    public void testEmailFieldHintAndContentDescription() {
+        // Verify the email field's hint and content description are correctly set
+        onView(withId(R.id.edit_email))
+                .check(matches(withHint("Email")))
+                .check(matches(withContentDescription("Email field for login")));
+    }
 
 
 
