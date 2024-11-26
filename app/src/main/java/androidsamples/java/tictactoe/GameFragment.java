@@ -61,6 +61,12 @@ public class GameFragment extends Fragment {
     GameFragmentArgs args = GameFragmentArgs.fromBundle(getArguments());
     Log.d(TAG, "New game type = " + args.getGameType());
     isSinglePlayer = (args.getGameType().equals("One-Player"));
+    String Myicon=args.getCharacter();
+    myChar=Myicon;
+    if(Myicon.equals("X"))
+      otherChar="O";
+    else
+      otherChar="X";
 
     userReference = FirebaseDatabase.getInstance("https://tictactoe-4b442-default-rtdb.firebaseio.com/").getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
 
@@ -69,6 +75,7 @@ public class GameFragment extends Fragment {
       gameReference.addListenerForSingleValueEvent(new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
+          Log.d(TAG, "onDataChange: ");
           game = snapshot.getValue(GameModel.class);
           assert game != null;
           gameArray = (game.getGameArray()).toArray(new String[9]);
@@ -78,13 +85,15 @@ public class GameFragment extends Fragment {
               myTurn = true;
               myChar = "X";
               otherChar = "O";
+              display.setText(R.string.your_turn);
             } else {
               isHost = false;
               myTurn = false;
               myChar = "O";
               otherChar = "X";
             }
-          } else {
+          }
+          else {
             if (!game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
               myTurn = true;
               myChar = "X";
@@ -104,9 +113,7 @@ public class GameFragment extends Fragment {
         }
       });
     }
-    else{
 
-    }
 
     // Handle the back press by adding a confirmation dialog
     OnBackPressedCallback callback = new OnBackPressedCallback(true) {
@@ -161,6 +168,7 @@ public class GameFragment extends Fragment {
     display = view.findViewById(R.id.display_tv);
     quitGame = view.findViewById(R.id.back_btn);
     quitGame.setOnClickListener(v -> getActivity().onBackPressed());
+
     if (!isSinglePlayer) {
       boolean check = false;
       for (String s : gameArray) {
@@ -195,11 +203,12 @@ public class GameFragment extends Fragment {
       int finalI = i;
       mButtons[i].setOnClickListener(v -> {
         if (myTurn){
+//          display.setText(R.string.your_turn);
           Log.d(TAG, "Button " + finalI + " clicked");
           ((Button) v).setText(myChar);
           gameArray[finalI] = myChar;
           v.setClickable(false);
-          display.setText(R.string.waiting);
+//          display.setText(R.string.waiting);
           if (!isSinglePlayer) {
             updateDB();
             myTurn = updateTurn(game.getTurn());
@@ -296,11 +305,12 @@ public class GameFragment extends Fragment {
   }
 
   private void waitForOtherPlayer() {
-
+    Log.d(TAG, "waitForOtherPlayer: ");
     display.setText(R.string.waiting);
     gameReference.addValueEventListener(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot snapshot) {
+        Log.d(TAG, "onDataChange: Second time");
         GameModel l = snapshot.getValue(GameModel.class);
         game.updateGameArray(l);
         gameArray = (game.getGameArray()).toArray(new String[9]);
@@ -308,7 +318,8 @@ public class GameFragment extends Fragment {
         myTurn = updateTurn(game.getTurn());
         display.setText(R.string.your_turn);
         int win = checkWin();
-        if (win == 1 || win == -1) endGame(win);
+        Log.d(TAG, "Winner is "+win);
+        if (! (win==0) )endGame(win);
         else if (checkDraw()) endGame(0);
       }
 
@@ -336,12 +347,15 @@ public class GameFragment extends Fragment {
   private void updateDB() {
     gameReference.child("gameArray").setValue(Arrays.asList(gameArray));
     gameReference.child("isOpen").setValue(!gameEnded);
-    if (game.getTurn() == 1) {
-      game.setTurn(2);
-    } else {
-      game.setTurn(1);
+    if(!gameEnded){
+      if (game.getTurn() == 1) {
+        game.setTurn(2);
+      } else {
+        game.setTurn(1);
+      }
+      gameReference.child("turn").setValue(game.getTurn());
     }
-    gameReference.child("turn").setValue(game.getTurn());
+
   }
 
   private void doRoboThings() {

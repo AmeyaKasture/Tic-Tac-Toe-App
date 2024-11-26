@@ -25,6 +25,9 @@
     <argument
         android:name="gameId"
         app:argType="string" />
+    <argument
+        android:name="Character"
+        app:argType="string" />
   </fragment>
   <fragment
       android:id="@+id/dashboardFragment"
