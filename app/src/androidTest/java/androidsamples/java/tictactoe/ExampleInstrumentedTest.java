@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
@@ -50,6 +51,43 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.btn_log_in))
                 .check(matches(withContentDescription("Click to log in")));
     }
+
+    @Test
+    public void testDashboardAccessibility() throws InterruptedException {
+        // Step 1: Perform login
+        InstrumentationRegistry.getInstrumentation().getUiAutomation()
+                .executeShellCommand("settings put secure autofill_service null");
+
+        onView(withId(R.id.edit_email))
+                .perform(typeText("hi@gmail.com"), closeSoftKeyboard());
+
+        onView(withId(R.id.edit_password))
+                .perform(typeText("1122334455"), closeSoftKeyboard());
+
+        onView(withId(R.id.btn_log_in))
+                .perform(click());
+
+        // Step 2: Add delay after clicking the login button
+        Thread.sleep(3000); // Wait for 3 seconds
+
+        // Step 3: Verify the Dashboard is displayed and check accessibility
+        onView(withId(R.id.won_score))
+                .check(matches(withContentDescription("Games won score")))
+                .check(matches(withText("0")));
+
+        onView(withId(R.id.lost_score))
+                .check(matches(withContentDescription("Games lost score")))
+                .check(matches(withText("0")));
+
+        onView(withId(R.id.open_display))
+                .check(matches(withContentDescription("List of open games")))
+                .check(matches(withText("Open Games")));
+
+
+    }
+
+
+
 
 
 
