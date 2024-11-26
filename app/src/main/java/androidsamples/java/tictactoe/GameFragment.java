@@ -203,12 +203,12 @@ public class GameFragment extends Fragment {
       int finalI = i;
       mButtons[i].setOnClickListener(v -> {
         if (myTurn){
-          display.setText(R.string.your_turn);
+//          display.setText(R.string.your_turn);
           Log.d(TAG, "Button " + finalI + " clicked");
           ((Button) v).setText(myChar);
           gameArray[finalI] = myChar;
           v.setClickable(false);
-          display.setText(R.string.waiting);
+//          display.setText(R.string.waiting);
           if (!isSinglePlayer) {
             updateDB();
             myTurn = updateTurn(game.getTurn());
@@ -316,7 +316,7 @@ public class GameFragment extends Fragment {
         gameArray = (game.getGameArray()).toArray(new String[9]);
         updateUI();
         myTurn = updateTurn(game.getTurn());
-//        display.setText(R.string.your_turn);
+        display.setText(R.string.your_turn);
         int win = checkWin();
         Log.d(TAG, "Winner is "+win);
         if (! (win==0) )endGame(win);
