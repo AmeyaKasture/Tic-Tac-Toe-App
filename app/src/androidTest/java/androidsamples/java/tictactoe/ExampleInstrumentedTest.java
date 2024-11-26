@@ -1,8 +1,9 @@
 package androidsamples.java.tictactoe;
 
 import android.content.Context;
+import android.view.View;
 
-import androidx.test.espresso.Espresso;
+import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
@@ -12,16 +13,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
+
 
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
@@ -85,6 +88,40 @@ public class ExampleInstrumentedTest {
 
 
     }
+
+    @Test
+    public void testLoginFailedToast() {
+        // Step 1: Enter invalid email
+        onView(withId(R.id.edit_email))
+                .perform(typeText("hi@gmail.com"), closeSoftKeyboard());
+
+        // Step 2: Enter invalid password
+        onView(withId(R.id.edit_password))
+                .perform(typeText("000000000"), closeSoftKeyboard());
+
+        // Step 3: Click the login button
+        onView(withId(R.id.btn_log_in))
+                .perform(click());
+
+        // Step 4: Wait to ensure the toast is displayed
+//        try {
+//            Thread.sleep(2000); // Add delay for the toast to appear
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+        // Step 5: Retrieve the DecorView
+        final View[] decorView = new View[1];
+        activityRule.getScenario().onActivity(activity -> {
+            decorView[0] = activity.getWindow().getDecorView();
+        });
+
+        // Step 6: Verify the toast message
+        onView(withText("Authentication failed"))
+                .inRoot(RootMatchers.withDecorView(not(decorView[0])))
+                .check(matches(isDisplayed()));
+    }
+
 
 
 
