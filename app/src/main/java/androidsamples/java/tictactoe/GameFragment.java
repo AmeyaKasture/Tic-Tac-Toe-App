@@ -91,6 +91,7 @@ public class GameFragment extends Fragment {
               myTurn = false;
               myChar = "O";
               otherChar = "X";
+              display.setText(R.string.waiting);
             }
           }
           else {
@@ -99,11 +100,13 @@ public class GameFragment extends Fragment {
               myChar = "X";
               otherChar = "O";
               isHost = false;
+              display.setText(R.string.your_turn);
             } else {
               isHost = true;
               myTurn = false;
               myChar = "O";
               otherChar = "X";
+              display.setText(R.string.waiting);
             }
           }
         }
@@ -304,6 +307,15 @@ public class GameFragment extends Fragment {
       updateDB();
   }
 
+  private boolean isEmpty() {
+    for (String cell : gameArray) {
+      if (!cell.isEmpty()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   private void waitForOtherPlayer() {
     Log.d(TAG, "waitForOtherPlayer: ");
     display.setText(R.string.waiting);
@@ -314,9 +326,16 @@ public class GameFragment extends Fragment {
         GameModel l = snapshot.getValue(GameModel.class);
         game.updateGameArray(l);
         gameArray = (game.getGameArray()).toArray(new String[9]);
+        if(!isEmpty()){
+          if (game.getHost().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+            display.setText(R.string.waiting);
+          } else {
+            display.setText(R.string.your_turn);
+          }
+        }
         updateUI();
         myTurn = updateTurn(game.getTurn());
-        display.setText(R.string.your_turn);
+//        display.setText(R.string.your_turn);
         int win = checkWin();
         Log.d(TAG, "Winner is "+win);
         if (! (win==0) )endGame(win);
@@ -357,6 +376,7 @@ public class GameFragment extends Fragment {
     }
 
   }
+
 
   private void doRoboThings() {
     Random rand = new Random();
