@@ -120,25 +120,50 @@ public class DashboardFragment extends Fragment {
     // Show a dialog when the user clicks the "new game" button
     view.findViewById(R.id.fab_new_game).setOnClickListener(v -> {
 
-      // A listener for the positive and negative buttons of the dialog
+      // A listener for the positive and negative buttons of the initial dialog
       DialogInterface.OnClickListener listener = (dialog, which) -> {
-        String gameType = "No type";
-        String gameId = "Single Game ID";
         if (which == DialogInterface.BUTTON_POSITIVE) {
-          gameType = getString(R.string.two_player);
-          gameId = gamesRef.push().getKey();
+          // Two-player game setup
+          String gameType = getString(R.string.two_player);
+          String gameId = gamesRef.push().getKey();
           assert gameId != null;
           gamesRef.child(gameId).setValue(new GameModel(FirebaseAuth.getInstance().getCurrentUser().getUid(), gameId));
           Log.i("FIREBASE", "Value set");
-          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId,"X");
+          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId, "X");
           mNavController.navigate(action);
+
         } else if (which == DialogInterface.BUTTON_NEGATIVE) {
-          gameType = getString(R.string.one_player);
-          NavDirections action = DashboardFragmentDirections.actionGame(gameType, gameId,"X");
-          Log.d(TAG, "");
-          mNavController.navigate(action);
+          // Single-player game setup with character selection dialog
+          String gameType = getString(R.string.one_player);
+          String gameId = "Single Game ID";
+
+          // Create another dialog for selecting a character
+          AlertDialog characterDialog = new AlertDialog.Builder(requireActivity())
+                  .setTitle("Select Character")
+                  .setItems(new String[]{"X", "O"}, (charDialog, charWhich) -> {
+                    String character;
+
+                    // Use switch for character selection
+                    switch (charWhich) {
+                      case 0:
+                        character = "X";
+                        break;
+                      case 1:
+                        character = "O";
+                        break;
+                      default:
+                        character = "X"; // Default to "X" if something unexpected occurs
+                        break;
+                    }
+
+                    NavDirections action = DashboardFragmentDirections.actionGameSingle(gameType, gameId, character);
+                    mNavController.navigate(action);
+                    Log.d(TAG, "Character chosen: " + character);
+                  })
+                  .create();
+          characterDialog.show();
         }
-        Log.d(TAG, "New Game: " + gameType);
+        Log.d(TAG, "New Game dialog finished");
       };
 
       // create the dialog

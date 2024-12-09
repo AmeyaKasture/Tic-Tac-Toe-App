@@ -40,5 +40,24 @@
     <action
         android:id="@+id/action_game"
         app:destination="@id/gameFragment" />
+    <action
+        android:id="@+id/action_game_single"
+        app:destination="@id/single_player_game_fragment" />
   </fragment>
+  <fragment
+      android:id="@+id/single_player_game_fragment"
+      android:name="androidsamples.java.tictactoe.SinglePlayerGameFragment"
+      android:label="@string/game_fragment_label"
+      tools:layout="@layout/fragment_game">
+    <argument
+        android:name="gameType"
+        app:argType="string" />
+    <argument
+        android:name="gameId"
+        app:argType="string" />
+    <argument
+        android:name="Character"
+        app:argType="string" />
+  </fragment>
+
 </navigation>

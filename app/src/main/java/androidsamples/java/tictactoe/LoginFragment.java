@@ -78,6 +78,7 @@ public class LoginFragment extends Fragment {
                                     NavHostFragment.findNavController(this).navigate(R.id.action_login_successful);
                                     userReference.child(task.getResult().getUser().getUid()).child("won").setValue(0);
                                     userReference.child(task.getResult().getUser().getUid()).child("lost").setValue(0);
+                                    userReference.child(task.getResult().getUser().getUid()).child("email_name").setValue(email.getText().toString());
                                 }
                                 pd.dismiss();
                             });
