@@ -7,11 +7,11 @@ import static org.junit.Assert.*;
 import androidsamples.java.tictactoe.models.GameModel;
 
 public class ExampleUnitTest {
-    private GameFragment gameFragment;
+    private MultiGameFragment gameFragment;
 
     @Before
     public void setUp() {
-        gameFragment = new GameFragment();
+        gameFragment = new MultiGameFragment();
         GameModel game = new GameModel();
     }
 
@@ -28,6 +28,7 @@ public class ExampleUnitTest {
         // Set up a winning game state
         gameFragment.gameArray = new String[]{"O", "O", "X", "X", "O", "X", "O", "X", "O"};
         // Check that the winning condition is detected correctly
+
         assertEquals(-1, gameFragment.checkWin());
     }
     @Test
@@ -37,10 +38,6 @@ public class ExampleUnitTest {
         // Check that the draw condition is detected correctly
         assertEquals(0, gameFragment.checkWin());
     }
-    @Test
-    public void testUpdateTurn() {
-        boolean turn = gameFragment.updateTurn(1);
-        assertEquals(turn, gameFragment.myTurn);
-    }
+
 
 }

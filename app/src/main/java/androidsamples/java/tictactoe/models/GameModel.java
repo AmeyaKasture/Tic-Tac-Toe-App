@@ -10,6 +10,7 @@ public class GameModel {
     private Boolean isOpen;
     private String gameId;
     private int turn;
+    public int winner;
 
     public GameModel(String host, String id) {
         this.host = host;
@@ -17,6 +18,7 @@ public class GameModel {
         gameArray = Arrays.asList("", "", "", "", "", "", "", "", "");
         this.gameId = id;
         turn = 1;
+        winner=0;
     }
 
     public GameModel(){}
@@ -56,6 +58,8 @@ public class GameModel {
     public void updateGameArray(GameModel o) {
         gameArray = o.gameArray;
         turn = o.turn;
+        winner=o.winner;
+        isOpen=o.isOpen;
     }
 
     public int getTurn() {

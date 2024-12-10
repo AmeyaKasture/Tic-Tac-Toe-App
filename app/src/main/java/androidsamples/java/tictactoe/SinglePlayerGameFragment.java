@@ -2,6 +2,7 @@ package androidsamples.java.tictactoe;
 
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class SinglePlayerGameFragment extends Fragment {
 
 
         // Initialize ViewModel
-        GameFragmentArgs args = GameFragmentArgs.fromBundle(getArguments());
+        MultiGameFragmentArgs args = MultiGameFragmentArgs.fromBundle(getArguments());
 
         String Myicon=args.getCharacter();
         myChar=Myicon;
@@ -124,5 +125,17 @@ public class SinglePlayerGameFragment extends Fragment {
 
     private void onCellClicked(int row, int col) {
         mViewModel.makeMove(row, col);
+        mButtons[row][col].setClickable(false);//// Disable the button after a move
+        if(mViewModel.game_ended){
+            for(int i=0;i<3;i++){
+                for(int j=0;j<3;j++){
+                    mButtons[i][j].setClickable(false);
+
+                }
+            }
+
+        }
     }
+
+
 }

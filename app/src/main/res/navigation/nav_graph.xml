@@ -16,7 +16,7 @@
   </fragment>
   <fragment
       android:id="@+id/gameFragment"
-      android:name="androidsamples.java.tictactoe.GameFragment"
+      android:name="androidsamples.java.tictactoe.MultiGameFragment"
       android:label="@string/game_fragment_label"
       tools:layout="@layout/fragment_game">
     <argument

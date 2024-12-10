@@ -28,7 +28,7 @@ public class SinglePlayerGameViewModel extends ViewModel {
     public   String playerChar = "X";
     public   String botChar = "O";
     private DatabaseReference  userReference=FirebaseDatabase.getInstance("https://tictactoe-4b442-default-rtdb.firebaseio.com/").getReference("users").child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
-    private boolean game_ended=false;
+    public boolean game_ended=false;
 
     public void handleBackPress(
             Context context,
