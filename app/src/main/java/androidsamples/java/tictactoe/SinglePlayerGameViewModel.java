@@ -78,6 +78,7 @@ public class SinglePlayerGameViewModel extends ViewModel {
 
     public void makeMove(int row, int col) {
         String[][] board = mGameBoard.getValue();
+
         if (board != null && board[row][col].isEmpty()) {
             board[row][col] = playerChar;
             mGameBoard.setValue(board);
@@ -111,7 +112,7 @@ public class SinglePlayerGameViewModel extends ViewModel {
         }
     }
 
-    private void doRoboThings() {
+    public void doRoboThings() {
         String[][] board = mGameBoard.getValue();
         if (board == null) return;
 

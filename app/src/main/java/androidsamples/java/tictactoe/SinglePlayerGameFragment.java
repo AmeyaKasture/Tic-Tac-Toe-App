@@ -99,6 +99,9 @@ public class SinglePlayerGameFragment extends Fragment {
                 {R.id.button6, R.id.button7, R.id.button8}
         };
 
+
+
+
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 mButtons[i][j] = view.findViewById(buttonIds[i][j]);
@@ -106,6 +109,8 @@ public class SinglePlayerGameFragment extends Fragment {
                 mButtons[i][j].setOnClickListener(v -> onCellClicked(row, col));
             }
         }
+        if(otherChar =="X")mViewModel.doRoboThings();
+
 
         // Observe LiveData for the game board
         mViewModel.getGameBoard().observe(getViewLifecycleOwner(), gameBoard -> {

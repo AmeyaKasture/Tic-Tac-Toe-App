@@ -178,6 +178,7 @@ public class MultiGameFragment extends Fragment {
                 game.updateGameArray(l);
                 gameArray = (game.getGameArray()).toArray(new String[9]);
                 Log.d(TAG, "Winner is "+game.winner);
+                updateUI();
                 if(game.winner!=0){
 
                     endGame(game.winner,my_turn,opp_turn,3);
@@ -192,8 +193,8 @@ public class MultiGameFragment extends Fragment {
                         display.setText(R.string.your_turn);
                     }
 
-                    updateUI();
-                }
+
+            }
 
             }
 
